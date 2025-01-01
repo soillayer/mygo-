@@ -1,19 +1,19 @@
-# MemeHelper - 表情包助手
+# MygoMemeHelper - 表情包助手
 
-MemeHelper 是一个便捷的表情包管理和快速选择工具，帮助用户更高效地管理和使用表情包。
+MygoHelper 是一个便捷的表情包管理和快速选择工具，帮助用户更高效地管理和使用表情包。
 
 ## 功能特点
 
-- 🖼️ 表情包快速选择和预览
-- 📁 本地表情包管理
-- 🔍 快速搜索功能
-- 🚀 便捷的状态窗口
-- ⌨️ 支持快捷键操作
+-  表情包快速选择和预览
+-  本地表情包管理
+-  快速搜索功能
+-  便捷的状态窗口
+-  支持快捷键操作
 
 ## 项目结构
 
 ```
-mygomeme/meme_helper/
+/MygoHelper/
 ├── src/                    # 源代码目录
 │   ├── meme_selector.py    # 表情包选择器
 │   ├── status_window.py    # 状态窗口
@@ -32,13 +32,13 @@ mygomeme/meme_helper/
 
 ## 安装说明
 
-1. 下载最新版本的 MemeHelper.zip
+1. 下载最新版本的 MygoHelper.zip
 2. 解压到任意目录
-3. 运行 MemeHelper.exe
+3. 运行 MygoHelper.exe
 
 ## 使用方法
 
-1. 启动程序后，系统托盘会出现 MemeHelper 图标
+1. 启动程序后，系统托盘会出现 MygoHelper 图标
 2. 使用默认快捷键（可在配置文件中自定义）打开表情选择器
 3. 输入关键词搜索表情包
 4. 选择需要的表情包即可使用
