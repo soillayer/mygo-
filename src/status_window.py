@@ -11,18 +11,18 @@ class StatusWindow:
             self.root.geometry("300x350")
             self.root.resizable(False, False)
             
-            # 设置窗口样式
+
             self.root.configure(bg='#f0f0f0')
             style = ttk.Style()
             style.configure('Switch.TCheckbutton',
                            background='#f0f0f0',
                            font=('Microsoft YaHei UI', 10))
             
-            # 创建主框架
+
             main_frame = ttk.Frame(self.root, padding="20")
             main_frame.pack(fill=tk.BOTH, expand=True)
             
-            # 标题
+
             title_label = ttk.Label(
                 main_frame,
                 text="mygo助手控制面板",
@@ -30,7 +30,7 @@ class StatusWindow:
             )
             title_label.pack(pady=(0, 10))
             
-            # 开关状态
+
             self.is_running = tk.BooleanVar(value=True)
             self.switch = ttk.Checkbutton(
                 main_frame,
@@ -41,7 +41,7 @@ class StatusWindow:
             )
             self.switch.pack(pady=5)
             
-            # 状态显示
+
             self.status_label = ttk.Label(
                 main_frame,
                 text="状态：运行中",
@@ -49,7 +49,7 @@ class StatusWindow:
             )
             self.status_label.pack(pady=5)
             
-            # 状态检查区域
+
             status_frame = ttk.LabelFrame(
                 main_frame,
                 text="环境检查",
@@ -57,7 +57,7 @@ class StatusWindow:
             )
             status_frame.pack(fill=tk.X, pady=5)
             
-            # 添加依赖状态指示
+
             self.dep_status = ttk.Label(
                 status_frame,
                 text="依赖状态: 检查中...",
@@ -65,7 +65,7 @@ class StatusWindow:
             )
             self.dep_status.pack(anchor=tk.W)
             
-            # 添加文件状态指示
+
             self.file_status = ttk.Label(
                 status_frame,
                 text="文件状态: 检查中...",
@@ -73,7 +73,7 @@ class StatusWindow:
             )
             self.file_status.pack(anchor=tk.W)
             
-            # 添加检查按钮
+
             check_btn = ttk.Button(
                 status_frame,
                 text="重新检查",
@@ -82,7 +82,7 @@ class StatusWindow:
             )
             check_btn.pack(pady=(5, 0))
             
-            # 使用说明
+
             tips_frame = ttk.LabelFrame(
                 main_frame,
                 text="使用说明",
@@ -106,14 +106,14 @@ class StatusWindow:
             
             self.on_switch_change = None
             
-            # 绑定关闭事件
+
             self.root.protocol("WM_DELETE_WINDOW", self.quit_app)
             
-            # 绑定全局快捷键
+
             self.root.bind_all('<Control-q>', self.quit_app)
             self.root.bind_all('<Control-Q>', self.quit_app)
             
-            # 启动时自动检查环境
+
             self.root.after(100, self.check_all)
             
         except Exception as e:
@@ -129,13 +129,13 @@ class StatusWindow:
     
     def minimize_to_tray(self):
         """最小化到托盘而不是关闭"""
-        self.root.iconify()  # 最小化窗口
+        self.root.iconify()  
     
     def quit_app(self, event=None):
         """退出应用程序"""
         if messagebox.askokcancel("退出", "确定要退出mygo助手吗？"):
-            self.root.destroy()  # 使用 destroy 而不是 quit
-            sys.exit(0)  # 确保程序完全退出
+            self.root.destroy()
+            sys.exit(0)
     
     def run(self):
         self.root.mainloop()
@@ -199,7 +199,6 @@ class StatusWindow:
             full_path = base_path / path
             if not full_path.exists():
                 missing_files.append(f"{desc} ({path})")
-                # 尝试创建目录
                 if path in ['images', 'config', 'data']:
                     try:
                         full_path.mkdir(parents=True, exist_ok=True)

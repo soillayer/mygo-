@@ -19,14 +19,14 @@ class MemeSelector:
         try:
             print("\n=== 初始化 MemeSelector ===")
             
-            # 检查程序目录结构
+
             required_dirs = {
                 '配置目录': Path(__file__).parent.parent / 'config',
                 '图片目录': Path(__file__).parent.parent / 'images',
                 '数据目录': Path(__file__).parent.parent / 'data'
             }
             
-            # 保存图片目录路径
+
             self.images_path = required_dirs['图片目录']
             
             for name, path in required_dirs.items():
@@ -35,10 +35,10 @@ class MemeSelector:
                     path.mkdir(parents=True, exist_ok=True)
                 print(f"✓ {name}: {path}")
 
-            # 检查必要文件
+
             config_path = required_dirs['配置目录'] / 'config.json'
             if not config_path.exists():
-                # 创建默认配置
+
                 default_config = {
                     "ui": {
                         "preview_size": {"width": 200},
@@ -61,7 +61,7 @@ class MemeSelector:
                     json.dump(default_config, f, indent=4, ensure_ascii=False)
                 print(f"已创建默认配置文件: {config_path}")
 
-            # 加载配置
+
             try:
                 with open(config_path, 'r', encoding='utf-8') as f:
                     self.config = json.load(f)
@@ -70,17 +70,17 @@ class MemeSelector:
                 print(f"配置文件加载失败: {e}")
                 raise
 
-            # 检查图片映射文件
+
             map_path = required_dirs['数据目录'] / 'image_map.json'
             if not map_path.exists():
-                # 创建空的图片映射文件
+
                 with open(map_path, 'w', encoding='utf-8') as f:
                     json.dump([], f)
                 print(f"已创建空的图片映射文件: {map_path}")
                 messagebox.showwarning("初始化提示", 
                     "检测到首次运行，请将表情包图片放入images目录，并运行索引工具生成图片映射。")
 
-            # 检查 OpenCC 依赖
+
             try:
                 import opencc
                 self.s2t = opencc.OpenCC('s2t')
@@ -93,19 +93,19 @@ class MemeSelector:
                     "可以通过运行 'pip install opencc-python-reimplemented' 安装。")
                 raise
 
-            # 加载图片映射
+
             self.image_map = self.load_image_map()
             print(f"✓ 加载了 {len(self.image_map)} 个图片映射")
             
-            # 初始化变量
+
             self.pinyin_buffer = ""
             self.current_window = None
             self.is_running = True
-            self.popup_queue = Queue()  # 添加队列用于窗口创建请求
-            self.photo_references = {}  # 改用字典存储图片引用
+            self.popup_queue = Queue()
+            self.photo_references = {}
             
-            # 初始化主窗口（在主线程中）
-            self.root = None  # 先不创建主窗口
+
+            self.root = None 
             
             print("=== 初始化完成 ===\n")
             
@@ -138,14 +138,14 @@ class MemeSelector:
     def _create_popup(self, memes):
         """实际创建弹窗的方法"""
         try:
-            # 清理旧窗口
+
             if self.current_window and self.current_window.winfo_exists():
                 self.current_window.destroy()
             
-            # 清理旧图片引用
+
             self.photo_references.clear()
             
-            # 预加载所有图片
+
             for meme in memes['urls']:
                 try:
                     img = Image.open(meme['url'])
@@ -162,21 +162,21 @@ class MemeSelector:
                 except Exception as e:
                     print(f"预加载图片失败 {meme['url']}: {e}")
             
-            # 创建新窗口
+
             window = tk.Toplevel(self.root)
             self.current_window = window
             window.overrideredirect(True)
             window.attributes('-topmost', True)
             window.attributes('-alpha', self.config['ui']['window_style']['opacity'])
             
-            # 创建主框架
+
             main_frame = tk.Frame(
                 window,
                 bg=self.config['ui']['window_style']['bg_color']
             )
             main_frame.pack(expand=True, fill=tk.BOTH)
             
-            # 创建标题栏
+
             title_frame = tk.Frame(
                 main_frame,
                 bg=self.config['ui']['window_style']['title_bg'],
@@ -185,7 +185,7 @@ class MemeSelector:
             title_frame.pack(fill=tk.X)
             title_frame.pack_propagate(False)
             
-            # 添加标题文本
+
             title_label = tk.Label(
                 title_frame,
                 text="表情包选择器",
@@ -195,7 +195,7 @@ class MemeSelector:
             )
             title_label.pack(side=tk.LEFT, padx=15)
             
-            # 添加关闭按钮
+
             close_btn = tk.Label(
                 title_frame,
                 text='×',
@@ -206,7 +206,7 @@ class MemeSelector:
             )
             close_btn.pack(side=tk.RIGHT, padx=15)
             
-            # 创建内容区域
+
             content_frame = tk.Frame(
                 main_frame,
                 bg=self.config['ui']['window_style']['bg_color'],
@@ -215,7 +215,7 @@ class MemeSelector:
             )
             content_frame.pack(expand=True, fill=tk.BOTH)
             
-            # 当前图片索引
+
             current_index = tk.IntVar(value=0)
             total_images = len(memes['urls'])
             
@@ -226,14 +226,14 @@ class MemeSelector:
                     current_index.set(new_index)
                     update_image(new_index)
             
-            # 创建导航按钮框架
+
             nav_frame = tk.Frame(
                 content_frame,
                 bg=self.config['ui']['window_style']['bg_color']
             )
             nav_frame.pack(fill=tk.X, pady=(0, 10))
             
-            # 创建按钮样式
+
             button_style = {
                 'bg': self.config['ui']['window_style']['button_bg'],
                 'fg': self.config['ui']['window_style']['text_color'],
@@ -243,7 +243,7 @@ class MemeSelector:
                 'relief': 'flat'
             }
             
-            # 上一张按钮
+
             prev_btn = tk.Label(
                 nav_frame,
                 text="◀",
@@ -251,12 +251,12 @@ class MemeSelector:
             )
             prev_btn.pack(side=tk.LEFT)
             
-            # 绑定按钮事件和悬停效果
+
             prev_btn.bind('<Button-1>', lambda e: change_image(-1))
             prev_btn.bind('<Enter>', lambda e: prev_btn.configure(bg=self.config['ui']['window_style']['button_hover']))
             prev_btn.bind('<Leave>', lambda e: prev_btn.configure(bg=self.config['ui']['window_style']['button_bg']))
             
-            # 下一张按钮
+
             next_btn = tk.Label(
                 nav_frame,
                 text="▶",
@@ -264,19 +264,19 @@ class MemeSelector:
             )
             next_btn.pack(side=tk.RIGHT)
             
-            # 绑定按钮事件和悬停效果
+
             next_btn.bind('<Button-1>', lambda e: change_image(1))
             next_btn.bind('<Enter>', lambda e: next_btn.configure(bg=self.config['ui']['window_style']['button_hover']))
             next_btn.bind('<Leave>', lambda e: next_btn.configure(bg=self.config['ui']['window_style']['button_bg']))
             
-            # 创建图片容器
+
             image_frame = tk.Frame(
                 content_frame,
                 bg=self.config['ui']['window_style']['bg_color']
             )
             image_frame.pack(expand=True, fill=tk.BOTH)
             
-            # 创建图片标签
+
             image_label = tk.Label(
                 image_frame,
                 bg=self.config['ui']['window_style']['bg_color'],
@@ -284,14 +284,14 @@ class MemeSelector:
             )
             image_label.pack(expand=True)
             
-            # 创建信息框架
+
             info_frame = tk.Frame(
                 content_frame,
                 bg=self.config['ui']['window_style']['bg_color']
             )
             info_frame.pack(fill=tk.X, pady=(10, 0))
             
-            # 创建名称标签
+
             name_label = tk.Label(
                 info_frame,
                 bg=self.config['ui']['window_style']['bg_color'],
@@ -300,7 +300,7 @@ class MemeSelector:
             )
             name_label.pack()
             
-            # 创建分数标签
+
             score_label = tk.Label(
                 info_frame,
                 bg=self.config['ui']['window_style']['bg_color'],
@@ -316,12 +316,12 @@ class MemeSelector:
                     url = meme['url']
                     
                     if url in self.photo_references:
-                        # 使用预加载的图片
+
                         photo = self.photo_references[url]
                         image_label.configure(image=photo)
                         image_label.image = photo
                         
-                        # 更新其他信息
+
                         name_label.configure(text=f"{meme['alt']} ({index + 1}/{total_images})")
                         prev_btn.configure(state=tk.NORMAL if index > 0 else tk.DISABLED)
                         next_btn.configure(state=tk.NORMAL if index < total_images - 1 else tk.DISABLED)
@@ -338,16 +338,16 @@ class MemeSelector:
                     import traceback
                     traceback.print_exc()
             
-            # 绑定点击事件
+
             image_label.bind('<Button-1>', lambda e: self.send_meme(memes['urls'][current_index.get()]['url'], window))
             
-            # 绑定键盘快捷键
+
             window.bind('<Left>', lambda e: change_image(-1))
             window.bind('<Right>', lambda e: change_image(1))
             window.bind('<Return>', lambda e: self.send_meme(memes['urls'][current_index.get()]['url'], window))
             window.bind('<Escape>', lambda e: window.destroy())
             
-            # 窗口关闭时清理引用
+
             def on_window_close():
                 self.photo_references.clear()
                 window.destroy()
@@ -355,15 +355,15 @@ class MemeSelector:
             window.protocol("WM_DELETE_WINDOW", on_window_close)
             close_btn.bind('<Button-1>', lambda e: on_window_close())
             
-            # 绑定关闭按钮事件和悬停效果
+
             close_btn.bind('<Button-1>', lambda e: on_window_close())
             close_btn.bind('<Enter>', lambda e: close_btn.configure(fg='#ff4444'))
             close_btn.bind('<Leave>', lambda e: close_btn.configure(fg=self.config['ui']['window_style']['text_color']))
             
-            # 立即显示第一张图片
+
             update_image(0)
             
-            # 窗口拖动功能
+
             def start_move(event):
                 window.x = event.x
                 window.y = event.y
@@ -380,7 +380,7 @@ class MemeSelector:
             title_label.bind('<Button-1>', start_move)
             title_label.bind('<B1-Motion>', on_motion)
             
-            # 调整窗口位置
+
             window.update()
             cursor_x, cursor_y = win32gui.GetCursorPos()
             window_width = window.winfo_width()
@@ -388,19 +388,19 @@ class MemeSelector:
             screen_width = window.winfo_screenwidth()
             screen_height = window.winfo_screenheight()
             
-            # 计算窗口位置（优先放在鼠标右上方）
-            x = cursor_x + 10  # 鼠标右侧10像素
-            y = cursor_y - window_height - 10  # 鼠标上方10像素
+
+            x = cursor_x + 10
+            y = cursor_y - window_height - 10
             
-            # 如果右边放不下，就放左边
+
             if x + window_width > screen_width:
                 x = cursor_x - window_width - 10
             
-            # 如果上面放不下，就放下面
+
             if y < 0:
                 y = cursor_y + 10
             
-            # 确保窗口完全在屏幕内
+
             x = max(0, min(x, screen_width - window_width))
             y = max(0, min(y, screen_height - window_height))
             
@@ -414,28 +414,28 @@ class MemeSelector:
     def send_meme(self, url: str, window: tk.Tk):
         """发送表情包"""
         try:
-            # 直接打开本地图片文件
+
             img = Image.open(url)
             output = BytesIO()
             img.convert('RGB').save(output, 'BMP')
             data = output.getvalue()[14:]
             output.close()
             
-            # 复制到剪贴板
+
             win32clipboard.OpenClipboard()
             win32clipboard.EmptyClipboard()
             win32clipboard.SetClipboardData(win32con.CF_DIB, data)
             win32clipboard.CloseClipboard()
             
-            # 关闭窗口
+
             window.destroy()
             
-            # 等待一小段时间确保窗口已关闭
+
             time.sleep(0.1)
             
-            # 模拟粘贴操作
+
             keyboard.press_and_release('ctrl+v')
-            # 模拟回车发送
+
             time.sleep(0.1)
             keyboard.press_and_release('enter')
             
@@ -466,7 +466,7 @@ class MemeSelector:
             elif event.name in ['space', 'enter']:
                 if self.pinyin_buffer:
                     print(f"尝试获取中文文本，拼音: {self.pinyin_buffer}")
-                    # 保存原始剪贴板内容
+
                     original_clipboard = None
                     try:
                         win32clipboard.OpenClipboard()
@@ -476,7 +476,7 @@ class MemeSelector:
                     except:
                         pass
 
-                    # 模拟复制操作获取输入法转换的文本
+
                     keyboard.send('ctrl+a')
                     time.sleep(0.1)
                     keyboard.send('ctrl+c')
@@ -489,9 +489,9 @@ class MemeSelector:
                             if text and any('\u4e00' <= char <= '\u9fff' for char in text):
                                 print(f"获取到中文文本: {text}")
                                 self.search_memes(text)
-                        win32clipboard.EmptyClipboard()  # 清空剪贴板
+                        win32clipboard.EmptyClipboard()
                         
-                        # 恢复原始剪贴板内容
+
                         if original_clipboard:
                             win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, original_clipboard)
                         
@@ -524,13 +524,13 @@ class MemeSelector:
             print(f"\n开始搜索: {text}")
             results = []
             
-            # 生成搜索文本的繁简体版本
-            search_text_simp = self.t2s.convert(text.lower())  # 简体版本
-            search_text_trad = self.s2t.convert(text.lower())  # 繁体版本
+
+            search_text_simp = self.t2s.convert(text.lower())
+            search_text_trad = self.s2t.convert(text.lower())
             print(f"搜索文本: 简体「{search_text_simp}」繁体「{search_text_trad}」")
             
-            # 分词处理
-            search_words_simp = set(search_text_simp)  # 字符级分词
+
+            search_words_simp = set(search_text_simp)
             search_words_trad = set(search_text_trad)
             
             for img in self.image_map:
@@ -543,7 +543,7 @@ class MemeSelector:
                 desc_simp = self.t2s.convert(desc)
                 desc_trad = self.s2t.convert(desc)
                 
-                # 1. 完全匹配 (100分)
+
                 if any(search_text in text for search_text, text in [
                     (search_text_simp, name_simp),
                     (search_text_simp, desc_simp),
@@ -552,7 +552,7 @@ class MemeSelector:
                 ]):
                     score = 100
                 
-                # 2. 词组匹配 (80分)
+
                 elif len(search_text_simp) > 1 and (
                     search_text_simp in name_simp or 
                     search_text_simp in desc_simp or
@@ -561,22 +561,22 @@ class MemeSelector:
                 ):
                     score = 80
                 
-                # 3. 部分匹配
+
                 else:
-                    # 计算字符匹配率
+
                     name_chars = set(name_simp + name_trad)
                     desc_chars = set(desc_simp + desc_trad)
                     search_chars = search_words_simp | search_words_trad
                     
-                    # 标题匹配 (最高60分)
+
                     name_match = len(search_chars & name_chars) / len(search_chars)
                     name_score = int(60 * name_match)
                     
-                    # 描述匹配 (最高40分)
+
                     desc_match = len(search_chars & desc_chars) / len(search_chars)
                     desc_score = int(40 * desc_match)
                     
-                    # 4. 标签加权 (额外20分)
+
                     tags_score = 0
                     if 'tags' in img:
                         tags = set(''.join(self.t2s.convert(tag.lower()) for tag in img['tags']))
@@ -585,29 +585,28 @@ class MemeSelector:
                     
                     score = name_score + desc_score + tags_score
                 
-                # 5. 额外规则
-                # 5.1 字数匹配加分
+
                 if len(search_text_simp) == len(name_simp):
                     score += 10
                     
-                # 5.2 位置权重
+
                 if search_text_simp in name_simp[:len(search_text_simp)]:
-                    score += 5  # 前缀匹配加分
+                    score += 5
                 
-                # 添加结果（分数超过阈值）
+
                 if score >= self.config['features']['search']['score_threshold']:
                     results.append({
                         'url': str(self.images_path / img['file_name']),
                         'alt': img['name'],
                         'score': score,
-                        'debug_info': {  # 调试信息
+                        'debug_info': {
                             'name_match': name_match if 'name_match' in locals() else 1.0,
                             'desc_match': desc_match if 'desc_match' in locals() else 0.0,
                             'tags_score': tags_score if 'tags_score' in locals() else 0
                         }
                     })
             
-            # 去重并排序
+
             unique_results = {}
             for result in results:
                 url = result['url']
