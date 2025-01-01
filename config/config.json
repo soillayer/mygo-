@@ -1,0 +1,48 @@
+{
+    "ui": {
+        "window_size": {
+            "width": 400,
+            "height": 400
+        },
+        "preview_size": {
+            "width": 360,
+            "height": 270
+        },
+        "window_style": {
+            "bg_color": "#2c2c2c",
+            "opacity": 0.95,
+            "title_bg": "#1e1e1e",
+            "hover_bg": "#3c3c3c",
+            "text_color": "#ffffff",
+            "accent_color": "#4a90e2",
+            "button_bg": "#3c3c3c",
+            "button_hover": "#4c4c4c"
+        },
+        "layout": {
+            "padding": 15,
+            "spacing": 10
+        }
+    },
+    "features": {
+        "search": {
+            "max_results": 5,
+            "fuzzy_match": true,
+            "score_threshold": 50
+        },
+        "auto_send": {
+            "enabled": true,
+            "delay": 0.1
+        }
+    },
+    "hotkeys": {
+        "close": "esc",
+        "send": "enter"
+    },
+    "paths": {
+        "images": "images",
+        "data": "data"
+    },
+    "debounce": {
+        "delay": 0.3
+    }
+} 
