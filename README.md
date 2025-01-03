@@ -31,11 +31,21 @@ MygoHelper 是一个便捷的表情包管理和快速选择工具，帮助用户
 ```
 
 ## 安装说明
-
+一.从release下载
 1. 下载最新版本的 MygoHelper.zip
 2. 解压到任意目录
 3. 运行 MygoHelper.exe
 
+二.如果要从源码运行：
+1. 克隆仓库（下载zip解压也可以）
+2. 对着解压后的文件夹按右键，选择用控制台打开（你的电脑有python）。安装依赖：
+   ```
+   pip install -r requirements.txt
+   ```
+3. 运行主程序：
+   ```
+   python run.py
+   ```
 ## 使用方法
 
 1. 启动程序后，系统托盘会出现 MygoHelper 图标
@@ -55,20 +65,6 @@ MygoHelper 是一个便捷的表情包管理和快速选择工具，帮助用户
 
 - Windows 10 及以上系统
 - Python 3.6+（如果从源码运行）
-
-## 开发说明
-
-如果要从源码运行：
-
-1. 克隆仓库
-2. 安装依赖：
-   ```
-   pip install -r requirements.txt
-   ```
-3. 运行主程序：
-   ```
-   python run.py
-   ```
 
 ## 许可证
 
