@@ -9,6 +9,10 @@ MygoHelper 是一个便捷的表情包管理和快速选择工具，帮助用户
 -  快速搜索功能
 -  便捷的状态窗口
 -  支持快捷键操作
+-  Tab 键：呼出搜索窗口
+-  Esc 键：隐藏窗口
+-  Ctrl+C：退出程序
+
 
 ## 项目结构
 
@@ -31,16 +35,18 @@ MygoHelper 是一个便捷的表情包管理和快速选择工具，帮助用户
 ```
 
 ## 安装说明
-一.从release下载
-1. 下载最新版本的 MygoHelper.zip
-2. 解压到任意目录
-3. 运行 MygoHelper.exe
-
-二.如果要从源码运行：
+一、从源码运行：
 1. 克隆仓库（下载zip解压也可以）
 2. 对着解压后的文件夹按右键，选择用控制台打开（你的电脑有python）。安装依赖：
    ```
-   pip install -r requirements.txt
+   pip install keyboard>=0.13.5
+   pip install Pillow>=9.0.0
+   pip install pywin32>=305
+   pip install opencc-python-reimplemented>=0.1.6
+   pip install pypinyin>=0.49.0
+   pip install fuzzywuzzy>=0.18.0
+   pip install python-Levenshtein>=0.21.0
+   
    ```
 3. 运行主程序：
    ```
@@ -48,10 +54,11 @@ MygoHelper 是一个便捷的表情包管理和快速选择工具，帮助用户
    ```
 ## 使用方法
 
-1. 启动程序后，系统托盘会出现 MygoHelper 图标
-2. 使用默认快捷键（可在配置文件中自定义）打开表情选择器
+1. 启动程序后，按tab呼出窗口
+2. 使用窗口上方搜索栏
 3. 输入关键词搜索表情包
-4. 选择需要的表情包即可使用
+4. 左键单击需要的表情包可以复制
+5. 回到聊天框，把表情包粘贴！
 
 ## 配置说明
 
